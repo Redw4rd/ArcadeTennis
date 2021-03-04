@@ -1,15 +1,19 @@
+import gameBoard from './gameBoard.js';
+import Player from './player.js';
+
 export default class gameLogic {
 
-    /**
-     * Constructor
-     * @param {object} canvas
-     */
-    constructor(canvas) {
+    constructor() {
+        this.frameCount = 30;
         this.isRunning = false;
         this.startEvent = true;
-        this.canvas = canvas;
+        this.board = new gameBoard();
+
+        this.playerOne = null;
+        this.playerTwo = null;
 
         this.initialization();
+        this.gameCycle();
     }
 
     initialization() {
@@ -26,7 +30,17 @@ export default class gameLogic {
                     this.isRunning = !this.isRunning;
                     break;
             }
-        }); 
+        });
+
+        this.playerOne = new Player('Player 1', 10, this.board.width / 4);
+        this.playerTwo = new Player('Player 2', this.board.width - 20, this.board.height / 4);
+    }
+
+    gameCycle() {
+        setInterval(() => {
+            this.board.definePaddle(this.playerOne.position);
+            this.board.definePaddle(this.playerTwo.position);
+        }, 1000/this.frameCount);
     }
 
     /**
@@ -38,13 +52,14 @@ export default class gameLogic {
     }
     /**
      * Pause function
+     * @param {boolean} value
      */
     set pause(value) {
         this.isRunning = value;
     }
 
     draw() {
-        return this.canvas;
+        return this.board.canvas;
     }
 
 }

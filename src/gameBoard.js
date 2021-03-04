@@ -1,23 +1,19 @@
-export default class gameBoard extends HTMLElement {
+export default class gameBoard {
 
     constructor() {
-        super();
-
         this.width = window.innerWidth - 30;
         this.height = window.innerHeight - 30;
+        this.canvas = null;
         this.ctx = null;
+        this.init();
     }
 
-    connectedCallback() {
-        this.attachShadow({mode: 'open'});
-
-        let canvas = document.createElement('canvas');
-        this.ctx = canvas.getContext('2d');
-        canvas.setAttribute('id', 'tennisGame');
-        canvas.setAttribute('width', this.width);
-        canvas.setAttribute('height', this.height);
-
-        this.shadowRoot.appendChild(canvas);
+    init() {
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.canvas.setAttribute('id', 'tennisGame');
+        this.canvas.setAttribute('width', this.width);
+        this.canvas.setAttribute('height', this.height);
         this.defineBoard();
     }
 
@@ -34,5 +30,13 @@ export default class gameBoard extends HTMLElement {
         this.ctx.lineTo(this.width / 2, this.height);
         this.ctx.stroke();
         this.ctx.closePath();
+    }
+
+    /**
+     * @param {{ x: number; y: number; }} pos
+     */
+    definePaddle(pos) {
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.fillRect(pos.x, pos.y, 10, 200);
     }
 }

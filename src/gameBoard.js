@@ -14,7 +14,6 @@ export default class gameBoard {
         this.canvas.setAttribute('id', 'tennisGame');
         this.canvas.setAttribute('width', this.width);
         this.canvas.setAttribute('height', this.height);
-        this.defineBoard();
     }
 
     defineBoard() {
@@ -38,5 +37,9 @@ export default class gameBoard {
     definePaddle(pos) {
         this.ctx.fillStyle = '#ffffff';
         this.ctx.fillRect(pos.x, pos.y, 10, 200);
+    }
+
+    clear() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
     }
 }

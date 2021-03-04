@@ -19,7 +19,6 @@ export default class gameLogic {
     initialization() {
         // Keypress watcher
         document.addEventListener('keydown', (e) => {
-            console.log(e.key)
             switch(e.key) {
                 case 'Enter':
                     // TODO: Start the game
@@ -29,6 +28,18 @@ export default class gameLogic {
                     // TODO: Pause/Resume the game
                     this.isRunning = !this.isRunning;
                     break;
+                case 'w':
+                    this.playerOne.positionY = -10;
+                break;
+                case 's':
+                    this.playerOne.positionY = 10;
+                break;
+                case 'ArrowUp':
+                    this.playerTwo.positionY = -10;
+                break;
+                case 'ArrowDown':
+                    this.playerTwo.positionY = 10;
+                break;
             }
         });
 
@@ -38,6 +49,8 @@ export default class gameLogic {
 
     gameCycle() {
         setInterval(() => {
+            this.board.clear();
+            this.board.defineBoard();
             this.board.definePaddle(this.playerOne.position);
             this.board.definePaddle(this.playerTwo.position);
         }, 1000/this.frameCount);

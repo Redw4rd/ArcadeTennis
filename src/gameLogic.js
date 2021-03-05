@@ -4,10 +4,20 @@ import Player from './player.js';
 export default class gameLogic {
 
     constructor() {
-        this.frameCount = 30;
+        this.frameCount = 60;
         this.isRunning = false;
         this.startEvent = true;
         this.board = new gameBoard();
+        this.keyBindings = {
+            p1: {
+                up: 'w',
+                down: 's'
+            },
+            p2: {
+                up: 'ArrowUp',
+                down: 'ArrowDown'
+            }
+        }
 
         this.playerOne = null;
         this.playerTwo = null;
@@ -17,34 +27,9 @@ export default class gameLogic {
     }
 
     initialization() {
-        // Keypress watcher
-        document.addEventListener('keydown', (e) => {
-            switch(e.key) {
-                case 'Enter':
-                    // TODO: Start the game
-                    this.startEvent = false;
-                    break;
-                case ' ':
-                    // TODO: Pause/Resume the game
-                    this.isRunning = !this.isRunning;
-                    break;
-                case 'w':
-                    this.playerOne.positionY = -10;
-                break;
-                case 's':
-                    this.playerOne.positionY = 10;
-                break;
-                case 'ArrowUp':
-                    this.playerTwo.positionY = -10;
-                break;
-                case 'ArrowDown':
-                    this.playerTwo.positionY = 10;
-                break;
-            }
-        });
-
         this.playerOne = new Player('Player 1', 10, this.board.width / 4);
         this.playerTwo = new Player('Player 2', this.board.width - 20, this.board.height / 4);
+        this.keyPressHander('keydown');
     }
 
     gameCycle() {
@@ -69,6 +54,26 @@ export default class gameLogic {
      */
     set pause(value) {
         this.isRunning = value;
+    }
+
+    keyPressHander(type) {
+        window.addEventListener(type, (e) => {
+            e.preventDefault();
+            switch(e.key) {
+                case (this.keyBindings.p1.up):
+                    this.playerOne.positionY = -10;
+                break;
+                case (this.keyBindings.p1.down):
+                    this.playerOne.positionY = 10;
+                break;
+                case (this.keyBindings.p2.up):
+                    this.playerTwo.positionY = -10;
+                break;
+                case (this.keyBindings.p2.down):
+                    this.playerTwo.positionY = 10;
+                break;
+            }
+        });
     }
 
     draw() {

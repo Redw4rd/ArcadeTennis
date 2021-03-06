@@ -1,5 +1,7 @@
+import Ball from './ball.js';
 import gameBoard from './gameBoard.js';
 import Player from './player.js';
+import Keyboard from './keyboardControl.js';
 
 export default class gameLogic {
 
@@ -8,17 +10,9 @@ export default class gameLogic {
         this.isRunning = false;
         this.startEvent = true;
         this.board = new gameBoard();
-        this.keyBindings = {
-            p1: {
-                up: 'w',
-                down: 's'
-            },
-            p2: {
-                up: 'ArrowUp',
-                down: 'ArrowDown'
-            }
-        }
+        this.ball = null;
 
+        this.keyBoard = new Keyboard();
         this.playerOne = null;
         this.playerTwo = null;
 
@@ -27,9 +21,12 @@ export default class gameLogic {
     }
 
     initialization() {
+        window.addEventListener('keydown', (e) => {this.keyBoard.onKeyDown(e);}, false);
+        window.addEventListener('keyup', (e) => {this.keyBoard.onKeyUp(e);}, false);
+
         this.playerOne = new Player('Player 1', 10, this.board.width / 4);
         this.playerTwo = new Player('Player 2', this.board.width - 20, this.board.height / 4);
-        this.keyPressHander('keydown');
+        //this.ball = new Ball();
     }
 
     gameCycle() {
@@ -38,6 +35,7 @@ export default class gameLogic {
             this.board.defineBoard();
             this.board.definePaddle(this.playerOne.position);
             this.board.definePaddle(this.playerTwo.position);
+            this.playerUpdate();
         }, 1000/this.frameCount);
     }
 
@@ -56,24 +54,11 @@ export default class gameLogic {
         this.isRunning = value;
     }
 
-    keyPressHander(type) {
-        window.addEventListener(type, (e) => {
-            e.preventDefault();
-            switch(e.key) {
-                case (this.keyBindings.p1.up):
-                    this.playerOne.positionY = -10;
-                break;
-                case (this.keyBindings.p1.down):
-                    this.playerOne.positionY = 10;
-                break;
-                case (this.keyBindings.p2.up):
-                    this.playerTwo.positionY = -10;
-                break;
-                case (this.keyBindings.p2.down):
-                    this.playerTwo.positionY = 10;
-                break;
-            }
-        });
+    playerUpdate() {
+        if (this.keyBoard.isDown(this.keyBoard.p1.UP)) {this.playerOne.positionY = -10;};
+        if (this.keyBoard.isDown(this.keyBoard.p1.DOWN)) {this.playerOne.positionY = 10;};
+        if (this.keyBoard.isDown(this.keyBoard.p2.UP)) {this.playerTwo.positionY = -10;};
+        if (this.keyBoard.isDown(this.keyBoard.p2.DOWN)) {this.playerTwo.positionY = 10;};
     }
 
     draw() {

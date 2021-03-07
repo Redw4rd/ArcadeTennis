@@ -26,7 +26,7 @@ export default class gameLogic {
 
         this.playerOne = new Player('Player 1', 10, this.board.width / 4);
         this.playerTwo = new Player('Player 2', this.board.width - 20, this.board.height / 4);
-        //this.ball = new Ball();
+        this.ball = new Ball(this.board.width / 2, this.board.height / 2, this.board);
     }
 
     gameCycle() {
@@ -35,7 +35,9 @@ export default class gameLogic {
             this.board.defineBoard();
             this.board.definePaddle(this.playerOne.position);
             this.board.definePaddle(this.playerTwo.position);
-            this.playerUpdate();
+            this.board.defineBall(this.ball.position);
+            this.playerControl();
+            this.ball.update();
         }, 1000/this.frameCount);
     }
 
@@ -54,7 +56,7 @@ export default class gameLogic {
         this.isRunning = value;
     }
 
-    playerUpdate() {
+    playerControl() {
         if (this.keyBoard.isDown(this.keyBoard.p1.UP)) {this.playerOne.positionY = -10;};
         if (this.keyBoard.isDown(this.keyBoard.p1.DOWN)) {this.playerOne.positionY = 10;};
         if (this.keyBoard.isDown(this.keyBoard.p2.UP)) {this.playerTwo.positionY = -10;};

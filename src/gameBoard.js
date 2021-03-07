@@ -39,6 +39,14 @@ export default class gameBoard {
         this.ctx.fillRect(pos.x, pos.y, 10, 200);
     }
 
+    defineBall(pos) {
+        this.ctx.fillStyle = '#FF0000';
+        this.ctx.beginPath();
+        this.ctx.arc(pos.x, pos.y, 7, 0, Math.PI*2);
+        this.ctx.closePath();
+        this.ctx.fill();
+    }
+
     clear() {
         this.ctx.clearRect(0, 0, this.width, this.height);
     }

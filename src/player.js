@@ -6,6 +6,7 @@ export default class Player {
             x: posX,
             y: posY
         };
+        this.scoreNum = 0;
     }
     /**
      * @param {any} x
@@ -18,5 +19,9 @@ export default class Player {
      */
     set positionY(y) {
         this.position.y += y;
+    }
+
+    set score(num) {
+        this.scoreNum += num;
     }
 }

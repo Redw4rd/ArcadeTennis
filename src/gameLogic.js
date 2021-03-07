@@ -7,7 +7,7 @@ export default class gameLogic {
 
     constructor() {
         this.frameCount = 60;
-        this.isRunning = false;
+        this.isRunning = true;
         this.startEvent = true;
         this.board = new gameBoard();
         this.ball = null;
@@ -31,13 +31,31 @@ export default class gameLogic {
 
     gameCycle() {
         setInterval(() => {
+            if (!this.isRunning) return;
+
             this.board.clear();
             this.board.defineBoard();
+            this.board.definePlayerScore(this.board.width / 2 -100, 60, this.playerOne.scoreNum);
+            this.board.definePlayerScore(this.board.width / 2 +50, 60, this.playerTwo.scoreNum);
             this.board.definePaddle(this.playerOne.position);
             this.board.definePaddle(this.playerTwo.position);
             this.board.defineBall(this.ball.position);
             this.playerControl();
-            this.ball.update();
+            this.ball.update(this.playerOne, this.playerTwo);
+
+            switch(this.ball.newScore()) {
+                case 'playerOne': this.playerOne.score = 10; this.board.defineBall({x:this.board.width / 2, y:this.board.height / 2});this.ball.update(this.playerOne, this.playerTwo); break;
+                case 'playerTwo': this.playerTwo.score = 10; this.board.defineBall({x:this.board.width / 2, y:this.board.height / 2});this.ball.update(this.playerOne, this.playerTwo); break;
+                case false: return; 
+            }
+
+            if (this.playerOne.scoreNum >= 100) {
+                this.board.gameOver('Player 1');
+                this.isRunning = false;
+            } else if(this.playerTwo.scoreNum >= 100) {
+                this.board.gameOver('Player 2');
+                this.isRunning = false;
+            }
         }, 1000/this.frameCount);
     }
 
@@ -57,10 +75,10 @@ export default class gameLogic {
     }
 
     playerControl() {
-        if (this.keyBoard.isDown(this.keyBoard.p1.UP)) {this.playerOne.positionY = -10;};
-        if (this.keyBoard.isDown(this.keyBoard.p1.DOWN)) {this.playerOne.positionY = 10;};
-        if (this.keyBoard.isDown(this.keyBoard.p2.UP)) {this.playerTwo.positionY = -10;};
-        if (this.keyBoard.isDown(this.keyBoard.p2.DOWN)) {this.playerTwo.positionY = 10;};
+        if (this.keyBoard.isDown(this.keyBoard.p1.UP)) {this.playerOne.positionY = -20;};
+        if (this.keyBoard.isDown(this.keyBoard.p1.DOWN)) {this.playerOne.positionY = 20;};
+        if (this.keyBoard.isDown(this.keyBoard.p2.UP)) {this.playerTwo.positionY = -20;};
+        if (this.keyBoard.isDown(this.keyBoard.p2.DOWN)) {this.playerTwo.positionY = 20;};
     }
 
     draw() {

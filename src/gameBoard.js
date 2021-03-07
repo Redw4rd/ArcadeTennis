@@ -47,6 +47,20 @@ export default class gameBoard {
         this.ctx.fill();
     }
 
+    definePlayerScore(x, y, score) {
+        this.ctx.font = 'bold 48px serif';
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.fillText(Number(score), x, y);
+    }
+
+    gameOver(playername) {
+        this.ctx.fillStyle = '#000000';
+        this.ctx.fillRect(0, 0, this.width, this.height);
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.font = 'bold 48px serif';
+        this.ctx.fillText(playername + ' win', this.width / 2 - 200, this.height / 2);
+    }
+
     clear() {
         this.ctx.clearRect(0, 0, this.width, this.height);
     }
